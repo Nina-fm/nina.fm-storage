@@ -26,7 +26,7 @@ Install dependencies.
 npm install
 ```
 
-Run the app in local
+Run the app in local or development
 
 ```sh
 npm run dev
@@ -35,7 +35,6 @@ npm run dev
 Run the app in production
 
 ```sh
-npm run build
 npm run start
 ```
 
