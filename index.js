@@ -8,9 +8,12 @@ const { uploadBaseDir, uploadBasePath, upload } = require("./multer.config");
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
+const DEBUG = process.env.DEBUG || false;
 const PUBLIC_BASE_URL =
   process.env.PUBLIC_BASE_URL || `http://localhost:${PORT}`;
 const publicBaseUrl = `${PUBLIC_BASE_URL}/${uploadBaseDir}`;
+
+const log = (...msg) => (DEBUG ? console.log(...msg) : null);
 
 const app = express();
 app.use(cors());
@@ -18,8 +21,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.post("/api/upload", upload.single("file"), (req, res, next) => {
-  console.log("req.body", req.body);
-  console.log("req.file", req.file);
+  log("req.body", req.body);
+  log("req.file", req.file);
 
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
@@ -34,7 +37,7 @@ app.post("/api/upload", upload.single("file"), (req, res, next) => {
 });
 
 app.post("/api/delete", (req, res) => {
-  console.log("req.body", req.body);
+  log("req.body", req.body);
 
   if (!req.body || !req.body.filename) {
     return res.status(400).json({ error: "Bucket and filename are required" });
@@ -73,4 +76,6 @@ app.use(`/${uploadBaseDir}`, express.static(uploadBasePath));
 // Start the server
 app.listen(PORT);
 
+console.log("Nina.fm Storage API");
 console.log(`Server is running on port ${PORT}`);
+console.log(`Public base URL: ${publicBaseUrl}`);

@@ -7,6 +7,9 @@ Simple file storage, using Express.js and Multer.js
 Create a .env at project root and put those variables inside.
 
 ```sh
+# Optional debug to console log requests
+DEBUG=true
+
 # The listening port of the Express app
 # Default to 3000 (if not provided here)
 PORT=3003
