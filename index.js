@@ -7,8 +7,9 @@ const { uploadBaseDir, uploadBasePath, upload } = require("./multer.config");
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3003;
-const PUBLIC_BASE_URL = process.env.PUBLIC_BASE_URL || "http://localhost:3003";
+const PORT = process.env.PORT || 3000;
+const PUBLIC_BASE_URL =
+  process.env.PUBLIC_BASE_URL || `http://localhost:${PORT}`;
 const publicBaseUrl = `${PUBLIC_BASE_URL}/${uploadBaseDir}`;
 
 const app = express();
