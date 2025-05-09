@@ -4,12 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow" />
     <title>Nina.fm Storage</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
-<body>
-    <h1>Welcome on Nina.fm Storage</h1>
-    <p>A simple and small image file storage.</p>
+<body class="p-4 bg-zinc-900 text-zinc-100">
+    <main class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-4">
+        <header class="flex flex-col items-center">
+            <h1 class="font-thin text-3xl tracking-wider">Welcome on <span class="tracking-wide font-bold">Nina.fm
+                    Storage</span></h1>
+            <p>A simple and small image file storage.</p>
+        </header>
+        <div class="flex gap-4">
+            <a href="/browse" class="px-3 py-1 bg-zinc-700 hover:bg-zinc-600 text-sm text-zinc-100 w-fit rounded-md">
+                Browse files
+            </a>
+            <a href="/upload"
+                class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-sm text-zinc-900 w-fit rounded-md">
+                Upload a file
+            </a>
+        </div>
+    </main>
 </body>
 
 </html>

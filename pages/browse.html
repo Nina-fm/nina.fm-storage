@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Nina.fm Storage</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+</head>
+
+<body class="p-4 bg-zinc-900 text-zinc-100">
+    <main class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-4">
+        <header class="flex flex-col items-center">
+            <h1 class="tracking-wide font-bold text-3xl">Nina.fm Storage</h1>
+            <p>Voici les fichiers disponibles sur notre serveur.</p>
+        </header>
+        <div id="files" class="rounded-lg bg-zinc-800 p-4 w-full max-w-[90vw]"></div>
+        <div class="flex justify-center gap-4">
+            <a href="/" class="px-3 py-1 bg-zinc-700 hover:bg-zinc-600 text-sm text-zinc-100 w-fit rounded-md">
+                Annuler
+            </a>
+            <a href="/upload" class="px-3 py-1 bg-zinc-700 hover:bg-zinc-600 text-sm text-zinc-100 w-fit rounded-md">
+                Uploader un fichier
+            </a>
+        </div>
+    </main>
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '/api/browse',
+                method: 'GET',
+                success: function (data) {
+                    const files = data;
+                    const fileList = $('<div class="flex flex-wrap gap-4"></div>');
+
+                    files.forEach(file => {
+                        const listItem = $(`
+                            <a href="${file.publicUrl}" target="_blank" class="flex items-center gap-2 aspect-square bg-zinc-700 hover:bg-zinc-600 p-4 rounded-lg" title="Ouvrir ${file.filename}">
+                                <img src="${file.publicUrl}" alt="${file.filename}" class="size-20 object-contain rounded-lg aspect-square"/>
+                            </a>
+                        `);
+                        fileList.append(listItem);
+                    });
+
+                    $('#files').append(fileList);
+                },
+                error: function (error) {
+                    console.error('Error fetching files:', error);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Nina.fm Storage - Upload a file</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+</head>
+
+<body class="p-4 bg-zinc-900 text-zinc-100">
+    <main class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-4 max-w-md">
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="space-y-8">
+                <header class="flex flex-col items-center">
+                    <h1 class="tracking-wide font-bold text-3xl">Nina.fm Storage</h1>
+                    <p>Envoyez une image sur notre serveur de fichiers.</p>
+                </header>
+                <div class="rounded-lg bg-zinc-800 p-4 w-full">
+                    <input id="bucket" type="hidden" name="bucket" value="uploads" />
+                    <input id="file" type="file" name="file" accept="image/*"
+                        class="border border-zinc-700 rounded px-2" />
+                </div>
+                <div class="flex justify-center gap-4">
+                    <a href="/browse"
+                        class="px-3 py-1 bg-zinc-700 hover:bg-zinc-600 text-sm text-zinc-100 w-fit rounded-md">
+                        Voir les fichiers
+                    </a>
+                    <a href="/" class="px-3 py-1 bg-zinc-700 hover:bg-zinc-600 text-sm text-zinc-100 w-fit rounded-md">
+                        Annuler
+                    </a>
+                    <button type="submit"
+                        class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-sm text-zinc-900 w-fit rounded-md">
+                        Uploader
+                    </button>
+                </div>
+            </div>
+        </form>
+        <div id="result" class="hidden">
+            <div class="space-y-8">
+                <header class="flex flex-col items-center">
+                    <h1 class="tracking-wide font-bold text-3xl">Nina.fm Storage</h1>
+                    <p>Votre fichier a bien été uploadé sur notre serveur, en voici les informations.</p>
+                </header>
+                <div id="fileDetails" class="flex flex-col gap-2">
+                    <div class="rounded-lg bg-zinc-800 p-4 w-full">
+                        <label class="font-bold text-zinc-600">Nom du fichier uploadé</label>
+                        <div id="filename" class="text-xs"></div>
+                    </div>
+                    <div class="rounded-lg bg-zinc-800 p-4 w-full">
+                        <label class="font-bold text-zinc-600">Url publique du fichier</label>
+                        <div id="publicUrl" class="text-xs"></div>
+                    </div>
+                    <div class="rounded-lg bg-zinc-800 p-4 w-full">
+                        <label class="font-bold text-zinc-600">Aperçu fichier uploadé</label>
+                        <img id="preview" class="max-h-60 max-w-full object-contain rounded-lg" />
+                    </div>
+                </div>
+                <div class="flex justify-center gap-4">
+                    <a href="/browse"
+                        class="px-3 py-1 bg-zinc-700 hover:bg-zinc-600 text-sm text-zinc-100 w-fit rounded-md">
+                        Voir les fichiers
+                    </a>
+                    <a href="/" class="px-3 py-1 bg-zinc-700 hover:bg-zinc-600 text-sm text-zinc-100 w-fit rounded-md">
+                        Annuler
+                    </a>
+                    <a href="/upload"
+                        class="px-3 py-1 bg-zinc-700 hover:bg-zinc-600 text-sm text-zinc-100 w-fit rounded-md">
+                        Envoyer un autre fichier
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#uploadForm").submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting the default way
+                var data = new FormData($('#uploadForm')[0]);
+                $.ajax({
+                    url: '/api/upload',
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    cache: false,
+                    data: data,
+                    success: function (res) {
+                        console.log(res);
+                        $("#uploadForm").hide();
+                        $("#result").show();
+                        $("#preview").attr("src", res.publicUrl);
+                        $("#filename").text(res.filename);
+                        $("#originalname").text(res.originalname);
+                        $("#publicUrl").html(`<a href="${res.publicUrl}" target="_blank" class="text-yellow-500 hover:text-yellow-400">${res.publicUrl}</a>`);
+                    },
+                    error: function (error) {
+                        console.error('Error: In sending the request!');
+                        alert("Le fichier n'a pas pu être uploadé, probablement à cause d'un format non pris en charge. Les formats pris en charge sont : .jpg, .jpeg, .png, .gif, .webp et .svg.");
+
+                    }
+                })
+            });
+        });
+    </script>
+</body>
+
+</html>

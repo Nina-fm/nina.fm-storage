@@ -16,6 +16,30 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/api/browse", (req, res) => {
+  log("req.body", req.body);
+
+  const bucket = "uploads";
+  const dirPath = path.join(uploadBasePath, bucket);
+  const baseUrl = req.protocol + "://" + req.get("host");
+
+  fs.readdir(dirPath, (err, files) => {
+    if (err) {
+      console.error("Error reading directory:", err);
+      return res.status(500).json({ error: "Failed to read directory" });
+    }
+
+    const fileList = files
+      .filter((item) => !/(^|\/)\.[^\/\.]/g.test(item))
+      .map((file) => ({
+        filename: file,
+        publicUrl: `${baseUrl}/${PUBLIC_ENDPOINT}/${bucket}/${file}`,
+      }));
+
+    res.json(fileList);
+  });
+});
+
 app.post("/api/upload", upload.single("file"), (req, res, next) => {
   log("req.body", req.body);
   log("req.file", req.file);
@@ -67,9 +91,11 @@ app.post("/api/delete", (req, res) => {
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/index.html"));
 });
-
-app.get("/upload-file", (req, res) => {
-  res.sendFile(path.join(__dirname, "/pages/upload-file.html"));
+app.get("/browse", (req, res) => {
+  res.sendFile(path.join(__dirname, "/pages/browse.html"));
+});
+app.get("/upload", (req, res) => {
+  res.sendFile(path.join(__dirname, "/pages/upload.html"));
 });
 
 // Set up static serving for the 'uploads' directory
