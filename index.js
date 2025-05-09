@@ -17,11 +17,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/api/browse", (req, res) => {
-  log("req.body", req.body);
+  log("req", req);
 
   const bucket = "uploads";
   const dirPath = path.join(uploadBasePath, bucket);
-  const baseUrl = req.protocol + "://" + req.headers.host;
+  const baseUrl = req.headers.referer;
   log("baseUrl", baseUrl);
 
   fs.readdir(dirPath, (err, files) => {
