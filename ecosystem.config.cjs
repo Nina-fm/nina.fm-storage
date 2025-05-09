@@ -3,8 +3,6 @@ module.exports = {
     {
       name: "nina-storage",
       port: "3003",
-      exec_mode: "cluster",
-      instances: "max",
       script: "npm",
       args: "start",
       env: {
