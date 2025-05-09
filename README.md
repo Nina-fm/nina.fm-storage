@@ -22,6 +22,10 @@ PUBLIC_ENDPOINT="public"
 # The upload dir path. It can be relative to project root or absolute
 # Default: "public"
 UPLOAD_PATH="/var/html/www/storage"
+
+# The public base url.
+# Default: "http://localhost:PORT"
+BASE_URL="http://storage.nina.fm"
 ```
 
 Install dependencies.
@@ -44,12 +48,17 @@ npm run start
 
 ## API
 
-The API provide two endpoints.
+The API provide those endpoints.
 
 | URI         | Method | Body                                                          |
 | ----------- | ------ | ------------------------------------------------------------- |
+| /api/browse | GET    |                                                               |
 | /api/upload | POST   | <pre>`{ bucket?: string\|undefined; file: File }`</pre>       |
 | /api/delete | POST   | <pre>`{ bucket?: string\|undefined; filename: string }`</pre> |
+
+### Browse files
+
+> IMPORTANT! Only files in the default bucket (uploaded from the /upload page) will be listed here.
 
 ### Upload a file
 
@@ -112,3 +121,11 @@ Take attention to the filename, prefixed with a short uuid.
   "publicUrl": "http://localhost:3003/public/avatar/1JBSTx1Qq2CB8JxcGUd12V--cover-square.jpg"
 }
 ```
+
+## Public Pages
+
+| URI     | Description                                           |
+| ------- | ----------------------------------------------------- |
+| /       | Welcome page                                          |
+| /browse | Page to list files in the default bucket (uploads)    |
+| /upload | Page to upload a file in the default bucket (uploads) |
