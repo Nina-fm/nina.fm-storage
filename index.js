@@ -3,17 +3,15 @@ const cors = require("cors");
 const path = require("path");
 const fs = require("fs");
 const dotenv = require("dotenv");
+const { log } = require("./lib/log");
 const { uploadBaseDir, uploadBasePath, upload } = require("./multer.config");
 
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
-const DEBUG = process.env.DEBUG || false;
 const PUBLIC_BASE_URL =
   process.env.PUBLIC_BASE_URL || `http://localhost:${PORT}`;
 const publicBaseUrl = `${PUBLIC_BASE_URL}/${uploadBaseDir}`;
-
-const log = (...msg) => (DEBUG ? console.log(...msg) : null);
 
 const app = express();
 app.use(cors());
@@ -68,6 +66,10 @@ app.post("/api/delete", (req, res) => {
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/index.html"));
+});
+
+app.get("/upload-file", (req, res) => {
+  res.sendFile(path.join(__dirname, "/pages/upload-file.html"));
 });
 
 // Set up static serving for the 'uploads' directory

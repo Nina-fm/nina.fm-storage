@@ -3,6 +3,7 @@ const short = require("short-uuid");
 const path = require("path");
 const dotenv = require("dotenv");
 const fs = require("fs");
+const { log } = require("./lib/log");
 
 dotenv.config();
 
@@ -11,8 +12,10 @@ const uploadBasePath = path.join(__dirname, uploadBaseDir);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    console.log("storage destination req.body", req.body);
-    const uploadPath = path.join(uploadBasePath, req.body?.bucket ?? "");
+    log("storage destination req.body", req.body);
+    const uploadPath = req.body?.bucket
+      ? path.join(uploadBasePath, req.body.bucket)
+      : uploadBasePath;
     fs.mkdirSync(uploadPath, { recursive: true });
     cb(null, uploadPath);
   },
