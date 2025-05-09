@@ -5,11 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nina.fm Storage - Upload a file</title>
+    <script type="text/javascript">
+        const apiUrl = process.env["PUBLIC_BASE_URL"] + '/api/upload';
+        document.getElementById('form').setAttribute('action', apiUrl);
+    </script>
 </head>
 
 <body>
     <h1>Upload a file</h1>
-    <form action="http://localhost:3003/api/upload" method="post" enctype="multipart/form-data">
+    <form id="form" method="post" enctype="multipart/form-data">
         <div style="margin-bottom: 20px;">
             <input type="hidden" name="bucket" value="uploads" />
             <input type="file" name="file" accept="image/*" />
