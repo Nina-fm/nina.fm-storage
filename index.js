@@ -4,14 +4,12 @@ const path = require("path");
 const fs = require("fs");
 const dotenv = require("dotenv");
 const { log } = require("./lib/log");
-const { uploadBaseDir, uploadBasePath, upload } = require("./multer.config");
+const { uploadBasePath, upload } = require("./multer.config");
 
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
-const PUBLIC_BASE_URL =
-  process.env.PUBLIC_BASE_URL || `http://localhost:${PORT}`;
-const publicBaseUrl = `${PUBLIC_BASE_URL}/${uploadBaseDir}`;
+const PUBLIC_ENDPOINT = process.env.PUBLIC_ENDPOINT || "files";
 
 const app = express();
 app.use(cors());
@@ -26,11 +24,13 @@ app.post("/api/upload", upload.single("file"), (req, res, next) => {
     return res.status(400).json({ error: "No file uploaded" });
   }
 
+  const baseUrl = `${req.headers.origin}/${PUBLIC_ENDPOINT}`;
+
   res.status(201).json({
     bucket: req?.body?.bucket ?? "",
     filename: req.file.filename,
     originalname: req.file.originalname,
-    publicUrl: `${publicBaseUrl}/${req.body.bucket}/${req.file.filename}`,
+    publicUrl: `${baseUrl}/${req.body.bucket}/${req.file.filename}`,
   });
 });
 
@@ -73,11 +73,10 @@ app.get("/upload-file", (req, res) => {
 });
 
 // Set up static serving for the 'uploads' directory
-app.use(`/${uploadBaseDir}`, express.static(uploadBasePath));
+app.use(`/${PUBLIC_ENDPOINT}`, express.static(uploadBasePath));
 
 // Start the server
 app.listen(PORT);
 
 console.log("Nina.fm Storage API");
 console.log(`Server is running on port ${PORT}`);
-console.log(`Public base URL: ${publicBaseUrl}`);

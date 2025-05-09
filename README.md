@@ -4,23 +4,24 @@ Simple file storage, using Express.js and Multer.js
 
 ## Getting started
 
-Create a .env at project root and put those variables inside.
+Create a .env at project root and put those variables inside. As you can see below, all are optionals, with default values.
 
 ```sh
-# Optional debug to console log requests
+# Debug to console log requests
+# Default: false
 DEBUG=true
 
-# The listening port of the Express app
-# Default to 3000 (if not provided here)
+# Listening port of the Express app
+# Default: 3000
 PORT=3003
 
-# The public base url of your app
-# Default to "http://localhost:3000" (if not provided here)
-PUBLIC_BASE_URL="http://localhost:3003"
+# The public endpoint name in urls to access files
+# Default: "files"
+PUBLIC_ENDPOINT="public"
 
-# The name of the public folder that will be generated and served for files access
-# Default to "public" (if not provided here)
-PUBLIC_DIRNAME="public"
+# The upload dir path. It can be relative to project root or absolute
+# Default: "public"
+UPLOAD_PATH="/var/html/www/storage"
 ```
 
 Install dependencies.

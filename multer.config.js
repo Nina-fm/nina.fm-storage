@@ -7,8 +7,8 @@ const { log } = require("./lib/log");
 
 dotenv.config();
 
-const uploadBaseDir = process.env.PUBLIC_DIRNAME || "public";
-const uploadBasePath = path.join(__dirname, uploadBaseDir);
+const uploadBaseDir = process.env.UPLOAD_PATH || "public";
+const uploadBasePath = path.resolve(uploadBaseDir);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
