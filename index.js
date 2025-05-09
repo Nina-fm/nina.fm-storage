@@ -10,6 +10,7 @@ dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC_ENDPOINT = process.env.PUBLIC_ENDPOINT || "files";
+const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
 
 const app = express();
 app.use(cors());
@@ -17,12 +18,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/api/browse", (req, res) => {
-  log("req", req);
+  log("req.body", req.body);
 
   const bucket = "uploads";
   const dirPath = path.join(uploadBasePath, bucket);
-  const baseUrl = req.header("Origin");
-  log("baseUrl", baseUrl);
 
   fs.readdir(dirPath, (err, files) => {
     if (err) {
@@ -34,7 +33,7 @@ app.get("/api/browse", (req, res) => {
       .filter((item) => !/(^|\/)\.[^\/\.]/g.test(item))
       .map((file) => ({
         filename: file,
-        publicUrl: `${baseUrl}/${PUBLIC_ENDPOINT}/${bucket}/${file}`,
+        publicUrl: `${BASE_URL}/${PUBLIC_ENDPOINT}/${bucket}/${file}`,
       }));
 
     res.json(fileList);
@@ -49,7 +48,7 @@ app.post("/api/upload", upload.single("file"), (req, res, next) => {
     return res.status(400).json({ error: "No file uploaded" });
   }
 
-  const baseUrl = `${req.headers.origin}/${PUBLIC_ENDPOINT}`;
+  const baseUrl = `${BASE_URL}/${PUBLIC_ENDPOINT}`;
 
   res.status(201).json({
     bucket: req?.body?.bucket ?? "",
