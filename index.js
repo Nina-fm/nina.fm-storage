@@ -21,7 +21,7 @@ app.get("/api/browse", (req, res) => {
 
   const bucket = "uploads";
   const dirPath = path.join(uploadBasePath, bucket);
-  const baseUrl = req.protocol + "://" + req.get("host");
+  const baseUrl = req.protocol + "://" + req.headers.host;
   log("baseUrl", baseUrl);
 
   fs.readdir(dirPath, (err, files) => {
