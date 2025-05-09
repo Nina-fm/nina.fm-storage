@@ -5,7 +5,8 @@ module.exports = {
       port: "3003",
       exec_mode: "cluster",
       instances: "max",
-      script: "./index.js",
+      script: "npm",
+      args: "start",
     },
   ],
 };
