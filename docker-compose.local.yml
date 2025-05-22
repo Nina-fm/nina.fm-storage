@@ -1,0 +1,11 @@
+services:
+  web:
+    build: .
+    ports:
+      - "3003:3003"
+    environment:
+      NODE_ENV: production
+      UPLOAD_PATH: /storage
+    volumes:
+      # Monte un dossier local ./uploads vers /usr/src/app/uploads
+      - /Users/vincent/Sites/nina/storage:/storage
